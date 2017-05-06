@@ -28,6 +28,10 @@ The goals / steps of this project are the following:
 
 
 ---
+### Data
+
+The data needed for this project can be found here at these links to the labeled data [vehicle](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/vehicles.zip) and [non-vehicle](https://s3.amazonaws.com/udacity-sdc/Vehicle_Tracking/non-vehicles.zip) examples that is needed to train the classifier. **Extract the contents of the zip files into a folder called "data" in the root of the project directory.**
+
 
 ### Histogram of Oriented Gradients (HOG)
 
