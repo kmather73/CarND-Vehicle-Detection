@@ -48,7 +48,7 @@ Here is an example of the original YUV image and the HOG image produced by this 
 
 ### #2. Training the classifier.
 
-I trained a linear SVM by first building a feature vector for each image in both of the "car" and "non-car" classes. Then I randomly shuffle the data into a training set and a testing set with a 80%-20% split.  The testing accuracy of the classifier was 99.46%, the code for this step is contained in the "SVM" code cell of the IPython notebook.
+I trained a linear SVM by first building a feature vector for each image in both of the "car" and "non-car" classes. Then I randomly shuffle the data into a training set and a testing set with a 80%-20% split.  The testing accuracy of the classifier was 99.46%. The classifier could be improved by training on a lager data set that includes motorcycles and semi-trucks as well as using a combination of classifiers, something like adaboosting the SVM's. The code for this step is contained in the "SVM" code cell of the IPython notebook.
 
 ### Sliding Window Search
 
@@ -85,5 +85,5 @@ I would generate a heat map of detected positions on the image and would add hea
 
 ### Discussion
 
- The pipline could be made more robust by keeping track of the number of cars on screen. Since currenly now when two car are close there bounding boxes merge togeather into one. If we could keep two seperate bounding boxes that would be a great improvement.
+ The pipline could be made more robust by keeping track of the number of cars on screen. Since currenly now when two car are close there bounding boxes merge togeather into one. If we could keep two seperate bounding boxes that would be a great improvement.  The pipline is likelly to fail in urban environment where there is a large density of cars on screen, was it would probably draw one large bounding box. The pipline also does not work if there are motorcycles or semi-trucks on the road.
 
