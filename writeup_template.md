@@ -1,108 +1,85 @@
-##Writeup Template
-###You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
-
----
+### README
 
 **Vehicle Detection Project**
 
 The goals / steps of this project are the following:
 
-* Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
-* Optionally, you can also apply a color transform and append binned color features, as well as histograms of color, to your HOG feature vector. 
-* Note: for those first two steps don't forget to normalize your features and randomize a selection for training and testing.
+* Perform a Histogram of Oriented Gradients (HOG) feature extraction, binned color features extraction, and histograms of color feature extraction  on a labeled training set of images and train a classifier Linear SVM classifier
 * Implement a sliding-window technique and use your trained classifier to search for vehicles in images.
-* Run your pipeline on a video stream (start with the test_video.mp4 and later implement on full project_video.mp4) and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
+* Run your pipeline on a video stream  and create a heat map of recurring detections frame by frame to reject outliers and follow detected vehicles.
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
+[image1]: ./output_images/HOG/car1-hog.jpg
+[image2]: ./output_images/HOG/car1-org.jpg
+[image3]: ./output_images/HOG/non-car1-hog.jpg
+[image4]: ./output_images/HOG/non-car1-org.jpg
+[image5]: ./output_images/windows/Sliding-Window1.png
+[image6]: ./output_images/windows/Sliding-Window2.png
+[image7]: ./output_images/windows/Sliding-Window3.png
+[image8]: ./output_images/windows/Sliding-Window4.png
+[image9]: ./output_images/windows/Sliding-Window3.png
+[image10]: ./output_images/Heatmaps/window-with-heatmap1.png
+[image11]: ./output_images/Heatmaps/window-with-heatmap2.png
+[image12]: ./output_images/Heatmaps/window-with-heatmap3.png
+[image13]: ./output_images/Heatmaps/window-with-heatmap4.png
+[image14]: ./output_images/Heatmaps/window-with-heatmap5.png
+[image15]: ./output_images/Heatmaps/window-with-heatmap6.png
 
-## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
-###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-###Writeup / README
 
-####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  [Here](https://github.com/udacity/CarND-Vehicle-Detection/blob/master/writeup_template.md) is a template writeup for this project you can use as a guide and a starting point.  
+### Histogram of Oriented Gradients (HOG)
 
-You're reading it!
+### #1. HOG features extraction and choice of parameters.
+First I loaded in the all of the image paths to both the "car" and "non-car" classes. Then in the project when we consider the HOG feature vector we first conver an image from a RGB colour space to a YUV colour space. Next we partition our images such that each block consists of a 2x2 cells, each cell consists of 16x16 pixels. Then we have 11 diferent orientations for the histograms. I choose theses parameters after I tried different parameters on random samples images from each of the two classes and displayed them to get a feel for what output look the 'best'. The code for this step is contained in the "Gradient feature selection (HOG)" and the "HOG Visualization" code cells of the IPython notebook.
 
-###Histogram of Oriented Gradients (HOG)
-
-####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
-
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
-
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+Here is an example of the original YUV image and the HOG image produced by this stage of the pipline applied to each of the `vehicle` and `non-vehicle` classes:
 
 ![alt text][image1]
-
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
-
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
-
-
 ![alt text][image2]
-
-####2. Explain how you settled on your final choice of HOG parameters.
-
-I tried various combinations of parameters and...
-
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
-
-I trained a linear SVM using...
-
-###Sliding Window Search
-
-####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
-
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
-
 ![alt text][image3]
-
-####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
-
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
-
 ![alt text][image4]
+
+
+### #2. Training the classifier.
+
+I trained a linear SVM by first building a feature vector for each image in both of the "car" and "non-car" classes. Then I randomly shuffle the data into a training set and a testing set with a 80%-20% split.  The testing accuracy of the classifier was 99.46%, the code for this step is contained in the "SVM" code cell of the IPython notebook.
+
+### Sliding Window Search
+
+For this I would crop roughly the bottom half of the image since there are no flying cars(yet). Then I would compute the HOG of this whole region and then sub-sample from it to avoid having to recompute. I could not decide on a single scale so did the search at 6 different scales, .85, 1.0, 1.25, 1.5, 1.75, 2.0. Each of I would crop the image indifferent sizes as to not make the pipline super slow. The code for this step is contained in the "Sliding Window Test", "Enhanced Sliding Window", and the "Sliding Window With Heat" code cells of the IPython notebook. Here is some example of the sliding window search at multiple scales and the merging of the found bounding boxes
+
+![alt text][image5]
+![alt text][image6]
+![alt text][image7]
+![alt text][image8]
+![alt text][image9]
 ---
 
 ### Video Implementation
 
-####1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+Here is a link to a  youtube video of my pipline in action
 
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/4G4XtjyrnoU/0.jpg)](https://youtu.be/4G4XtjyrnoU)
 
-####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
-
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
-
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
-
-### Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
+Here's a [link to my video file](./output_video_v15.mp4)
 
 
 
+### Filter false positives and combining overlapping bounding boxes.
+
+I would generate a heat map of detected positions on the image and would add heat to them. The idea being we can eliminate false positives by only considering positions that are hot enough, that is we thresholded the heatmap to identify vehicle positions. I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  We also let the heat decay over time to add a smoothing effect for future frames. Here are some examples of the heat map in action
+
+![alt text][image10]
+![alt text][image11]
+![alt text][image12]
+![alt text][image13]
+![alt text][image14]
+![alt text][image15]
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
-
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+ The pipline could be made more robust by keeping track of the number of cars on screen. Since currenly now when two car are close there bounding boxes merge togeather into one. If we could keep two seperate bounding boxes that would be a great improvement.
 
