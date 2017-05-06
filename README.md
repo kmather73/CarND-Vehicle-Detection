@@ -84,6 +84,7 @@ I would generate a heat map of detected positions on the image and would add hea
 ---
 
 ### Discussion
+There were not real issues faced in this project other then the slow time to process the large video file.
 
- The pipline could be made more robust by keeping track of the number of cars on screen. Since currenly now when two car are close there bounding boxes merge togeather into one. If we could keep two seperate bounding boxes that would be a great improvement.  The pipline is likelly to fail in urban environment where there is a large density of cars on screen, was it would probably draw one large bounding box. The pipline also does not work if there are motorcycles or semi-trucks on the road.
+The pipline could be made more robust by keeping track of the number of cars on screen. Since currenly now when two car are close there bounding boxes merge togeather into one. If we could keep two seperate bounding boxes that would be a great improvement.  The pipline is likelly to fail in urban environment where there is a large density of cars on screen, was it would probably draw one large bounding box. The pipline also does not work if there are motorcycles or semi-trucks on the road.
 
