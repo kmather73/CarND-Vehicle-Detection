@@ -35,7 +35,7 @@ The data needed for this project can be found here at these links to the labeled
 
 ### Histogram of Oriented Gradients (HOG)
 
-### #1. HOG features extraction and choice of parameters.
+### HOG features extraction and choice of parameters.
 First I loaded in the all of the image paths to both the "car" and "non-car" classes. Then in the project when we consider the HOG feature vector we first conver an image from a RGB colour space to a YUV colour space. Next we partition our images such that each block consists of a 2x2 cells, each cell consists of 16x16 pixels. Then we have 11 diferent orientations for the histograms. I choose theses parameters after I tried different parameters on random samples images from each of the two classes and displayed them to get a feel for what output look the 'best'. The code for this step is contained in the "Gradient feature selection (HOG)" and the "HOG Visualization" code cells of the IPython notebook.
 
 Here is an example of the original YUV image and the HOG image produced by this stage of the pipline applied to each of the `vehicle` and `non-vehicle` classes:
@@ -46,7 +46,7 @@ Here is an example of the original YUV image and the HOG image produced by this 
 ![alt text][image4]
 
 
-### #2. Training the classifier.
+### Training the classifier.
 
 I trained a linear SVM by first building a feature vector for each image in both of the "car" and "non-car" classes. Then I randomly shuffle the data into a training set and a testing set with a 80%-20% split.  The testing accuracy of the classifier was 99.46%. The classifier could be improved by training on a lager data set that includes motorcycles and semi-trucks as well as using a combination of classifiers, something like adaboosting the SVM's. The code for this step is contained in the "SVM" code cell of the IPython notebook.
 
